@@ -18,6 +18,7 @@ trait Tree {
     }
   }
 
+  def search(tar: Int): Boolean
   def display(level: Int = 0)
   def check_height(): Int
 }
@@ -25,6 +26,7 @@ trait Tree {
 object Empty extends Tree {
   def ins(tar: Int) = NonEmpty(Empty, tar, R, Empty)
 
+  def search(tar: Int) = false
   def display(level: Int) = {}
   def check_height() = 0;
 }
@@ -44,6 +46,12 @@ case class NonEmpty(left: Tree, key: Int, color: Color, right: Tree) extends Tre
       case NonEmpty(a, x, B, NonEmpty(NonEmpty(b, y, R, c), z, R, d)) => NonEmpty(NonEmpty(a, x, B, b), y, R, NonEmpty(c, z, B, d))
       case _ => this
     }
+  }
+
+  def search(tar: Int) = {
+    if (tar < key) left.search(tar)
+    else if (tar > key) right.search(tar)
+    else true
   }
 
   def display(level: Int) = {

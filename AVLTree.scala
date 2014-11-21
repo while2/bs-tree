@@ -11,6 +11,7 @@ trait Tree {
   def rotate_left(): Tree
   def rotate_right(): Tree
 
+  def search(tar: Int): Boolean
   def display(level: Int = 0)
   def check_height(): Int
 }
@@ -24,6 +25,7 @@ object Empty extends Tree {
   def rotate_left() = Empty
   def rotate_right() = Empty
 
+  def search(tar: Int) = false
   def display(level: Int) = {}
   def check_height() = 0
 }
@@ -82,6 +84,12 @@ case class NonEmpty(left: Tree, key: Int, right: Tree) extends Tree {
       }
     } else
       this
+  }
+
+  def search(tar: Int) = {
+    if (tar < key) left.search(tar)
+    else if (tar > key) right.search(tar)
+    else true
   }
 
   def display(level: Int) = {

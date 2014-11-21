@@ -1,5 +1,5 @@
 import math._
-import rb_tree._
+import avl_tree._
 
 object test extends App {
   override def main(args: Array[String]) = {
@@ -12,5 +12,6 @@ object test extends App {
       }
     }
     root.display()
+    println(root.search(1), root.search(100))
   }
 }
