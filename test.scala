@@ -1,17 +1,18 @@
 import math._
-import avl_tree._
+import rb_tree._
+import util._
 
 object test extends App {
   override def main(args: Array[String]) = {
     var root: Tree = Empty
-    for (nums <- (1 to 10).permutations) {
-      root = Empty
-      for (key <- nums) {
-        root = root.insert(key)
-        root.check_height
+    for (t <- 1 to 1000) {
+      if (Random.nextInt(3) == 0) {
+        root = root.insert(Random.nextInt(100))
+      } else {
+        root = root.delete(Random.nextInt(100))
       }
+      root.check_height
+      root.display()
     }
-    root.display()
-    println(root.search(1), root.search(100))
   }
 }

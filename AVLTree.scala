@@ -34,56 +34,42 @@ case class NonEmpty(left: Tree, key: Int, right: Tree) extends Tree {
   val height = max(left.height, right.height) + 1
 
   def insert(tar: Int) = {
-    if (tar < key)
-      NonEmpty(left.insert(tar), key, right).balance
-    else if (tar > key)
-      NonEmpty(left, key, right.insert(tar)).balance
-    else
-      this
+    if (tar < key) NonEmpty(left.insert(tar), key, right).balance
+    else if (tar > key) NonEmpty(left, key, right.insert(tar)).balance
+    else this
   }
 
   def delete(tar: Int) = {
-    if (tar < key)
-      NonEmpty(left.delete(tar), key, right).balance
-    else if (tar > key)
-      NonEmpty(left, key, right.delete(tar)).balance
-    else {
-      right match {
-        case NonEmpty(rl, rk, rr) => NonEmpty(left, rk, right.delete(rk)).balance
-        case _ => left
-      }
+    if (tar < key) NonEmpty(left.delete(tar), key, right).balance
+    else if (tar > key) NonEmpty(left, key, right.delete(tar)).balance
+    else right match {
+      case NonEmpty(rl, rk, rr) => NonEmpty(left, rk, right.delete(rk)).balance
+      case _ => left
     }
   }
 
-  def rotate_left() = {
-    right match {
-      case NonEmpty(rl, rk, rr) => NonEmpty(NonEmpty(left, key, rl), rk, rr)
-    }
+  def rotate_left() = right match {
+    case NonEmpty(rl, rk, rr) => NonEmpty(NonEmpty(left, key, rl), rk, rr)
   }
 
-  def rotate_right() = {
-    left match {
-      case NonEmpty(ll, lk, lr) => NonEmpty(ll, lk, NonEmpty(lr, key, right))
-    }
+  def rotate_right() = left match {
+    case NonEmpty(ll, lk, lr) => NonEmpty(ll, lk, NonEmpty(lr, key, right))
   }
 
   def balance() = {
-    if (left.height > right.height + 1) {
-      left match {
-        case NonEmpty(ll, lk, lr) => {
-          if (ll.height >= lr.height) rotate_right
-          else NonEmpty(left.rotate_left, key, right).rotate_right
-        }
+    if (left.height > right.height + 1) left match {
+      case NonEmpty(ll, lk, lr) => {
+        if (ll.height >= lr.height) rotate_right
+        else NonEmpty(left.rotate_left, key, right).rotate_right
       }
-    } else if (left.height + 1 < right.height) {
-      right match {
-        case NonEmpty(rl, rk, rr) => {
-          if (rl.height <= rr.height) rotate_left
-          else NonEmpty(left, key, right.rotate_right).rotate_left
-        }
+    }
+    else if (left.height + 1 < right.height) right match {
+      case NonEmpty(rl, rk, rr) => {
+        if (rl.height <= rr.height) rotate_left
+        else NonEmpty(left, key, right.rotate_right).rotate_left
       }
-    } else
-      this
+    }
+    else this
   }
 
   def search(tar: Int) = {
